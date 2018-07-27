@@ -65,6 +65,8 @@ and open the template in the editor.
                     
                 }
                
+                
+                //método que carrega apenas um usuario
                 public function loadId($id){
                     
                     $sql = new Sql();
@@ -85,6 +87,32 @@ and open the template in the editor.
                     }
                 }
                 
+                
+                //Método que retorna uma lista de usuários
+                public static function getLista(){
+                    
+                    
+                    $sql = new Sql();
+                    
+                    return $sql->selecionar("SELECT * FROM login ORDER BY idusuario;");
+                    
+                }
+                
+                //função que 
+                public static function Logar($loginn){
+                    
+                    $sql = new Sql();
+                    
+                    return $sql->selecionar("SELECT * FROM login WHERE usuario LIKE :SEARCH ORDER BY idusuario;", array(
+                     
+                        ":SEARCH"=>"%".$loginn."%"
+                        
+                    ));
+                            
+                    
+                }
+                
+                //Cria um JSON para imprimir os valores 
                 public function __toString() {
                     return json_encode(array(
                         
