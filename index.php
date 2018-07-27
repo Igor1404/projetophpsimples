@@ -14,11 +14,24 @@ and open the template in the editor.
         
         require_once "config.php";
         
+        
+        
+        $root = new Usuarioo();
+        
+        $root->loadId(1);
+        
+        echo $root;        
+        
+        
+        /*
         $sql = new Sql();
         
         $usuarios = $sql->selecionar("SELECT * FROM login");
         
         echo json_encode($usuarios);
+         * 
+         *          */
+        
         ?>
     </body>
 </html>

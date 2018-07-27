@@ -26,18 +26,18 @@ and open the template in the editor.
                 
                 
                 //função de setarparametros
-                private function setParams($stmt, $parameters = array()){
+                private function setParams($statement, $parameters = array()){
                    
                     foreach ($parameters as $key => $value) {
                         
-                        $this->bindParam($key, $value);
+                        $this->setumParam($statement, $key, $value);
                         
                     } 
                 }
                
-                private function setumParam($stmt,$key, $value){
+                private function setumParam($statement, $key, $value){
                     
-                    $statment->bindParam($key, $value);
+                    $statement->bindParam($key, $value);
                 }
                 
                 
