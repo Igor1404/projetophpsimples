@@ -14,13 +14,31 @@ and open the template in the editor.
         
         require_once "config.php";
       
+        $aluno = new Usuarioo();
         
+        $aluno->loadId(10);
+        $aluno->deletarDados();
+        
+        echo $aluno;
+       
+        
+        echo $aluno;
+        /*
+       
+         $aluno->loadId(10);
+         $aluno->atualizarDados("professor","senhaprofessor");
+         *
+         * 
+         * $aluno->setDeslogin('aluno');
+        $aluno->setDessenha('0011001');
+         * 
+         * 
         $buscarlista = Usuarioo::Logar("igor");
         
         echo json_encode($buscarlista);
         
-        /*
-       
+         * 
+         * 
          *  $root = new Usuarioo();
         
          *  //Chamando o método para listar usuários.

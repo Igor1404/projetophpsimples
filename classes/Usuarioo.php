@@ -50,7 +50,7 @@ and open the template in the editor.
                 }
                 public function setDeslogin($value){
                     
-                    $this->login = $value;
+                    $this->usuario = $value;
                     
                 }
                 
@@ -99,16 +99,97 @@ and open the template in the editor.
                 }
                 
                 //função que 
-                public static function Logar($loginn){
+                public static function Logar($loginn, $password){
                     
                     $sql = new Sql();
                     
-                    return $sql->selecionar("SELECT * FROM login WHERE usuario LIKE :SEARCH ORDER BY idusuario;", array(
-                     
-                        ":SEARCH"=>"%".$loginn."%"
+                    $resultado = $sql->selecionar("SELECT * FROM login WHERE usuario = :LOGIN AND senha = :PASSWORD",array(
                         
+                        ":LOGIN"=>$loginn,
+                        ":PASSWORD"=>$password
                     ));
+                    
+                    if(count($resultado)>0){
+                        
+                        $resultrow = $resultado[0];
+                        $this->setIdUsuario($resultrow['idusuario']);
+                        $this->setDeslogin($resultrow['usuario']);
+                        $this->setDessenha($resultrow['senha']);
+                        $this->setDtcadastro(new DateTime($resultrow['datacadastro']));
+                        
+                        
+                        
+                    }else{
+                        
+                        
+                        throw new Exception("Login e senha inválido: ");
+                        
+                    }
+                
+                }
+                
+                public function setarDados($dados){
+                   
+                    $this->setIdUsuario($dados['idusuario']);
+                    $this->setDeslogin($dados['usuario']);
+                    $this->setDessenha($dados['senha']);
+                    $this->setDtcadastro(new DateTime($dados['datacadastro']));
+                    
+                }
+                
+               
+                
+                public function inserirdados(){
+                    
+                    $sql = new Sql(); 
+                    
+                    $resultinserir = $sql->selecionar("CALL sp_usuario_insert(:LOGIN, :PASSWORD)", array(
+                        ":LOGIN"=>$this->getDeslogin(),
+                        ":PASSWORD"=>$this->getDessenha()
+                    ));
+                    
+                    if (count($resultinserir) > 0){
+                        
+                        $this->setarDados($resultinserir[0]);
+                        
+                    }
+        
+                }
+                
+                public function atualizarDados($login, $password){
+                    
+                    $this->setDeslogin($login);
+                    $this->setDessenha($password);
+                    
+                    $sql = new Sql();
+                    $sql->query("UPDATE login SET usuario = :LOGIN, senha = :PASSWORD, idusuario =  :ID", array(
+                        
+                        ":LOGIN"=>$this->getDeslogin(),
+                        ":PASSWORD"=>$this->getDessenha(),
+                        ":ID"=>$this->getIdUsuario()
+                    ));
+                           
+                }
+                
+                public function deletarDados(){
+                    
+                    $sql = new Sql();
+                    $sql->query("DELETE FROM login WHERE idusuario = :ID", array(
+                        ":ID"=>$this->getIdusuario()
+                    ));
+                    
+                    
+                    $this->setIdUsuario(0);
+                    $this->setDeslogin("");
+                    $this->setDessenha("");
+                    $this->setDtcadastro(new DateTime());
                             
+                }
+                
+                public function __construct($login = "",$password = ""){
+                    
+                    $this->setDeslogin($login);
+                    $this->setDessenha($password);
                     
                 }
                 
@@ -116,10 +197,10 @@ and open the template in the editor.
                 public function __toString() {
                     return json_encode(array(
                         
-                        "idusuario"=> $this->getIdusuario(),
-                        "usuario"=> $this->getDeslogin(),
-                        "senha"=> $this->getDessenha(),
-                        "datacadastro" => $this->getDtcadastro()
+                        "idusuario"=>$this->getIdusuario(),
+                        "usuario"=>$this->getDeslogin(),
+                        "senha"=>$this->getDessenha(),
+                        "datacadastro"=>$this->getDtcadastro()
                     ));
                 }
             }
